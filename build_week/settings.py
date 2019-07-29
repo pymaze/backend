@@ -118,9 +118,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = "build_week.civil_disobedients.CustomUser"
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
