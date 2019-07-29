@@ -77,10 +77,10 @@ WSGI_APPLICATION = 'build_week.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'DATABASE_URL': config('DATABASE_URL'),
-        'PASSWORD': config('DB_PASSWORD')
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'DATABASE_URL': os.environ.get('DATABASE_URL'),
+        'PASSWORD': os.environ.get('DB_PASSWORD')
     }
 }
 
