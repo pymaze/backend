@@ -74,16 +74,28 @@ WSGI_APPLICATION = 'build_week.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'DATABASE_URL': os.environ.get('DATABASE_URL'),
-        'PASSWORD': os.environ.get('DB_PASSWORD')
-    }
-}
+env = os.environ.get("PYTHON_ENV")
+if (env == 'production'):
 
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ.get('DB_NAME'),
+            'USER': os.environ.get('DB_USER'),
+            'DATABASE_URL': os.environ.get('DATABASE_URL'),
+            'PASSWORD': os.environ.get('DB_PASSWORD')
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ.get('DEV_DB_NAME'),
+            'USER': os.environ.get('DEV_DB_USER'),
+            'HOST': '127.0.0.1',
+            'PORT': '5432'
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
