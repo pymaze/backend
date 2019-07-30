@@ -38,8 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rooms.apps.RoomsConfig',
     'rest_framework',
-    'rooms',
+
 
 ]
 
@@ -79,7 +80,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'build_week.wsgi.application'
 
-
+DEBUG = True
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
