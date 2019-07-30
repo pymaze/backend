@@ -1,32 +1,37 @@
-from __future__ import unicode_literals
-from django.db import models, transaction
-from django.utils import timezone
+import jwt
+from datetime import datetime, timedelta
+from django.conf import settings
+from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser, PermissionsMixin, BaseUserManager)
 
 
 class UserManager(BaseUserManager):
-    def _create_user(self, username, password, **extra_fields):
-        """
-        Creates and saves a User with the given username and password
-        """
-        try:
-            with transaction.atomic():
-                user = self.model(username=username, **extra_fields)
-                user.set_password(password)
-                user.save(using=self.db)
-                return user
-        except:
-            raise
 
-    def create_user(self, username, password=None, **extra_fields):
+    def create_user(self, username, password=None):
+        """
+        Create and return a 'User' with username and password.
+        """
+        if username is None:
+            raise TypeError('Users must have a username.')
 
-        extra_fields.setdefault('is_superuser', False)
-        return self._create_user(username, password, **extra_fields)
+        user = self.model(username=username)
+        user.set_password(password)
+        user.save()
+        return user
 
     def create_superuser(self, username, password, **extra_fields):
-        extra_fields.setdefault('is_superuser', True)
-        return self._create_user(username, password=password, **extra_fields)
+        """
+        Create and return a 'User' with superuser permissions.
+        """
+        if password is None:
+            raise TypeError('Superusers must have a password.')
+        user = self.create_user(username, password)
+        user.is_superuser = True
+        user.is_staff = True
+
+        user.save()
+        return user
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -34,10 +39,29 @@ class User(AbstractBaseUser, PermissionsMixin):
     An abstract base class implementing a fully featured User model
     with admin-compliant permissions.
     """
-    objects = UserManager()
-    username = models.CharField(max_length=255, unique=True)
-    USERNAME_FIELD = 'username'
+    username = models.CharField(db_index=True, max_length=255, unique=True)
 
-    def save(self, *args, **kwargs):
-        super(User, self).save(*args, **kwargs)
-        return self
+    USERNAME_FIELD = 'username'
+    objects = UserManager()
+
+    def __str__(self):
+        return self.username
+
+    @property
+    def token(self):
+        return self._generate_jwt_token()
+
+    def get_full_name(self):
+        return self.username
+
+    def get_short_name(self):
+        return self.username
+
+    def _generate_jwt_token(self):
+        dt = datetime.now() + timedelta(days=60)
+        token = jwt.encode({
+            'id': self.pk,
+            'exp': int(dt.strftime('%s'))
+        }, settings.SECRET_KEY, algorithm='HS256')
+
+        return token.decode('utf-8')
