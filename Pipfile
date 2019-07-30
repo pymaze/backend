@@ -17,6 +17,7 @@ djangorestframework = "*"
 markdown = "*"
 django-filter = "*"
 djangorestframework-jwt = "*"
+django-extensions = "*"
 
 [requires]
 python_version = "3.7"
