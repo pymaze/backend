@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = config('SECRET_KEY')
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,7 +38,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rooms'
+
+
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+    ]
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -70,28 +80,28 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'build_week.wsgi.application'
 
-
+DEBUG = True
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-env = os.environ.get("PYTHON_ENV")
+env = config("PYTHON_ENV")
 if (env == 'production'):
 
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ.get('DB_NAME'),
-            'USER': os.environ.get('DB_USER'),
-            'DATABASE_URL': os.environ.get('DATABASE_URL'),
-            'PASSWORD': os.environ.get('DB_PASSWORD')
+            'NAME': config('DB_NAME'),
+            'USER': config('DB_USER'),
+            'DATABASE_URL': config('DATABASE_URL'),
+            'PASSWORD': config('DB_PASSWORD')
         }
     }
 else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ.get('DEV_DB_NAME'),
-            'USER': os.environ.get('DEV_DB_USER'),
+            'NAME': config('DEV_DB_NAME'),
+            'USER': config('DEV_DB_USER'),
             'HOST': '127.0.0.1',
             'PORT': '5432'
         }
