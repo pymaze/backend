@@ -14,6 +14,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import corsheaders
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,12 +27,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = config('SECRET_KEY')
 
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', 'localhost']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -51,6 +53,8 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -59,6 +63,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+CORS_ORIGIN_ALLOW_ALL = True
+
 
 ROOT_URLCONF = 'build_week.urls'
 
@@ -80,12 +88,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'build_week.wsgi.application'
 
-DEBUG = True
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 env = config("PYTHON_ENV")
 if (env == 'production'):
+
+    DEBUG = False
 
     DATABASES = {
         'default': {
@@ -97,6 +104,9 @@ if (env == 'production'):
         }
     }
 else:
+
+    DEBUG = True
+
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
