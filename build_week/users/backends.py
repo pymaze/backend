@@ -7,7 +7,6 @@ from .models import User
 
 
 class JWTAuthentication(authentication.BaseAuthentication):
-    authentication_header_prefix = 'Token'
 
     def authenticate(self, request):
         """
@@ -24,31 +23,24 @@ class JWTAuthentication(authentication.BaseAuthentication):
         """
 
         request.user = None
-        print(f'request: {request}')
 
         # 'auth_header' should be an array with two elements:
         # 1) name of header ('Token')
         # 2) the JWT itself
-        auth_header = authentication.get_authorization_header(request).split()
-        auth_header_prefix = self.authentication_header_prefix.lower()
-        print(f'auth_header: {auth_header}, {type(auth_header)}')
+        auth_header = authentication.get_authorization_header(
+            request).split()
         if not auth_header:
             return None
 
-        if len(auth_header) == 1:
+        if len(auth_header) == 0:
             # Invalid, no credentials provided. Don't attempt to authenticate
             return None
-        elif len(auth_header) > 2:
+        elif len(auth_header) > 1:
             # Invalid, Token string should not contain spaces. Don't authenticate.
             return None
 
-        # decode prefix and token
-        prefix = auth_header[0].decode('utf-8')
-        token = auth_header[1].decode('utf-8')
-
-        if prefix.lower() != auth_header_prefix:
-            # Auth header not what we expected. Don't authenticate.
-            return None
+        # decode token
+        token = auth_header[0].decode('utf-8')
         return self._authenticate_credentials(request, token)
 
     def _authenticate_credentials(self, request, token):

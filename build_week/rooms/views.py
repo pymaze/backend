@@ -4,9 +4,9 @@ from rest_framework.permissions import IsAuthenticated
 
 
 class RoomsView(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = [IsAuthenticated]
 
-    def all_rooms(request):
+    def get(self, request):
         return JsonResponse([
 
             [
