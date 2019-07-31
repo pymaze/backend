@@ -16,6 +16,8 @@ django-heroku = "*"
 djangorestframework = "*"
 markdown = "*"
 django-filter = "*"
+djangorestframework-jwt = "*"
+django-extensions = "*"
 flask = "*"
 django-cors-headers = "*"
 
