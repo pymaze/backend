@@ -27,7 +27,7 @@ SECRET_KEY = config('SECRET_KEY')
 
 
 ALLOWED_HOSTS = [
-    'https://build-week-civil-disobedients.herokuapp.com', 'http://127.0.0.1:8000']
+    'https://build-week-civil-disobedients.herokuapp.com', 'http:/localhost:8000']
 
 
 # Application definition
@@ -167,5 +167,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
 
 django_heroku.settings(locals())
