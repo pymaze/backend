@@ -25,11 +25,12 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         # Use the 'create_user' method to create a new user
-        return User.objects.create_user(**validated_data)
+        user = User.objects.create_user(**validated_data)
+        return user
 
 
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=255, read_only=True)
+    username = serializers.CharField(max_length=255, write_only=True)
     password = serializers.CharField(max_length=128, write_only=True)
     token = serializers.CharField(max_length=255, read_only=True)
 
@@ -39,7 +40,7 @@ class LoginSerializer(serializers.Serializer):
 
         if username is None:
             raise serializers.ValidationError(
-                'A username is required to log in.'
+                f'A username is required to log in.'
             )
         if password is None:
             raise serializers.ValidationError(
@@ -58,7 +59,4 @@ class LoginSerializer(serializers.Serializer):
                 'This user has been deactivated.'
             )
 
-        return {
-            'username': user.username,
-            'token': user.token
-        }
+        return {'token': user.token}
