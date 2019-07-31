@@ -14,7 +14,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-import corsheaders
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -27,7 +26,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = config('SECRET_KEY')
 
 
-ALLOWED_HOSTS = ['*', 'localhost']
+ALLOWED_HOSTS = [
+    'build-week-civil-disobedients.herokuapp.com', '127.0.0.1:8000']
 
 
 # Application definition
@@ -52,20 +52,26 @@ REST_FRAMEWORK = {
     ]
 }
 
-MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = (
+    'localhost:8000',
+)
+CORS_ORIGIN_REGEX_WHITELIST = (
+    'localhost:8000',
+)
+MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-
-CORS_ORIGIN_ALLOW_ALL = True
 
 
 ROOT_URLCONF = 'build_week.urls'
