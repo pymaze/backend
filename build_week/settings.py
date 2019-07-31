@@ -26,12 +26,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = config('SECRET_KEY')
 
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    'https://build-week-civil-disobedients.herokuapp.com', 'http://127.0.0.1:8000']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,8 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'rest_framework',
-    'rooms',
-    'users'
+    'users',
+    'build_week.rooms'
 
 
 ]
@@ -55,15 +57,27 @@ REST_FRAMEWORK = {
     )
 }
 
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+# CORS_ORIGIN_WHITELIST = (
+#     'localhost:8000',
+# )
+
+# CORS_ORIGIN_REGEX_WHITELIST = (
+#     'localhost:8000',
+# )
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'build_week.urls'
 
@@ -85,12 +99,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'build_week.wsgi.application'
 
-DEBUG = True
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 env = config("PYTHON_ENV")
 if (env == 'production'):
+
+    DEBUG = False
 
     DATABASES = {
         'default': {
@@ -102,6 +115,9 @@ if (env == 'production'):
         }
     }
 else:
+
+    DEBUG = True
+
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',

@@ -18,6 +18,8 @@ markdown = "*"
 django-filter = "*"
 djangorestframework-jwt = "*"
 django-extensions = "*"
+flask = "*"
+django-cors-headers = "*"
 
 [requires]
 python_version = "3.7"
