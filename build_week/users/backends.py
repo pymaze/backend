@@ -24,13 +24,14 @@ class JWTAuthentication(authentication.BaseAuthentication):
         """
 
         request.user = None
+        print(f'request: {request}')
 
         # 'auth_header' should be an array with two elements:
         # 1) name of header ('Token')
         # 2) the JWT itself
         auth_header = authentication.get_authorization_header(request).split()
         auth_header_prefix = self.authentication_header_prefix.lower()
-
+        print(f'auth_header: {auth_header}, {type(auth_header)}')
         if not auth_header:
             return None
 
