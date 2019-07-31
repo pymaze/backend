@@ -54,7 +54,10 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-    )
+    ),
+    'EXCEPTION_HANDLER': 'build_week.exceptions.build_week_exception_handler',
+    'NON_FIELD_ERRORS_KEY': 'error'
+
 }
 
 
