@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'users',
-    'build_week.rooms'
+    'rooms'
 
 
 ]
@@ -53,7 +53,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'users.backends.JWTAuthentication',
     ),
     'EXCEPTION_HANDLER': 'build_week.exceptions.build_week_exception_handler',
     'NON_FIELD_ERRORS_KEY': 'error'
