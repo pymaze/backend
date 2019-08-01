@@ -8,9 +8,9 @@ from django.contrib.auth.models import (
 
 class UserManager(BaseUserManager):
 
-    def create_user(self, username, password=None):
+    def create_user(self, username, password=None, current_room=None):
         """
-        Create and return a 'User' with username and password.
+        Create and return a 'User' with username and password. Sets current_room to None by default.
         """
         if username is None:
             raise TypeError('Users must have a username.')
@@ -20,7 +20,7 @@ class UserManager(BaseUserManager):
         user.save()
         return user
 
-    def create_superuser(self, username, password, **extra_fields):
+    def create_superuser(self, username, password, current_room=None, **extra_fields):
         """
         Create and return a 'User' with superuser permissions.
         """
@@ -38,24 +38,20 @@ class User(AbstractBaseUser, PermissionsMixin):
     """
     An abstract base class implementing a fully featured User model
     with admin-compliant permissions.
+    Also contains the current_room property detailing which room the active user is in.
     """
     username = models.CharField(db_index=True, max_length=255, unique=True)
+    current_room = models.CharField(max_length=255, default="start")
 
     USERNAME_FIELD = 'username'
     objects = UserManager()
 
     def __str__(self):
-        return self.username
+        return f'username: {self.username}, current_room: {self.current_room}'
 
     @property
     def token(self):
         return self._generate_jwt_token()
-
-    def get_full_name(self):
-        return self.username
-
-    def get_short_name(self):
-        return self.username
 
     def _generate_jwt_token(self):
         dt = datetime.now() + timedelta(days=60)
