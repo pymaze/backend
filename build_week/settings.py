@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'users',
-    'rooms'
+    'rooms',
+    'pusherchat'
 
 
 ]

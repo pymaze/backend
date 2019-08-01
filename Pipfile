@@ -20,6 +20,7 @@ djangorestframework-jwt = "*"
 django-extensions = "*"
 flask = "*"
 django-cors-headers = "*"
+pusher = "*"
 
 [requires]
 python_version = "3.7"
