@@ -21,7 +21,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         model = User
         # list all fields that could possible be included in a request
         # or response
-        fields = ['username', 'password', 'current_room', 'pk', 'token']
+        fields = ['username', 'password', 'current_room', 'token']
 
     def create(self, validated_data):
         # Use the 'create_user' method to create a new user
