@@ -13,7 +13,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         min_length=8,
         write_only=True
     )
-    # Client shoudln't be able to send a token with a registration
+    # Client shouldn't be able to send a token with a registration
     # request. Token being read-only handles this.
     token = serializers.CharField(max_length=255, read_only=True)
 
@@ -21,7 +21,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         model = User
         # list all fields that could possible be included in a request
         # or response
-        fields = ['username', 'password', 'token']
+        fields = ['username', 'password', 'current_room', 'pk', 'token']
 
     def create(self, validated_data):
         # Use the 'create_user' method to create a new user
@@ -30,7 +30,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=255, write_only=True)
+    username = serializers.CharField(max_length=255)
     password = serializers.CharField(max_length=128, write_only=True)
     token = serializers.CharField(max_length=255, read_only=True)
 
@@ -59,4 +59,17 @@ class LoginSerializer(serializers.Serializer):
                 'This user has been deactivated.'
             )
 
-        return {'token': user.token}
+        return user
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'current_room']
+
+    def update(self, instance, data):
+        instance.username = data.get('username', instance.username)
+        instance.current_room = data.get(
+            'current_room', instance.current_room)
+        instance.save()
+        return instance
