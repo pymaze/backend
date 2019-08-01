@@ -40,7 +40,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     with admin-compliant permissions.
     Also contains the current_room property detailing which room the active user is in.
     """
-    username = models.CharField(db_index=True, max_length=255, unique=True)
+
+    # Naive approach setting the username as the primary key, but as is
+    # we don't want to allow users to change their username, only the room
+    # their character is currently in
+    username = models.CharField(
+        db_index=True, max_length=255, unique=True, primary_key=True)
     current_room = models.CharField(max_length=255, default="start")
 
     USERNAME_FIELD = 'username'
