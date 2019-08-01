@@ -10,7 +10,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('users.urls', namespace='users')),
     path('api/rooms/', views.RoomsView.as_view()),
-    path('', views.index),
-    url('/api/chat/', admin.site.urls),
+    path('', views.RoomsView.index)
 
 ]
