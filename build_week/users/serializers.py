@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 
 from .models import User
 
@@ -65,11 +66,16 @@ class LoginSerializer(serializers.Serializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'current_room']
+        fields = ['username', 'current_room', 'players']
 
     def update(self, instance, data):
         instance.username = data.get('username', instance.username)
         instance.current_room = data.get(
             'current_room', instance.current_room)
         instance.save()
+
+        users = [u.username for u in User.objects.all(
+        ) if u.current_room == instance.current_room and u.username != instance.username]
+        instance.players = users
+
         return instance

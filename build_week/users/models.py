@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser, PermissionsMixin, BaseUserManager)
+from django.contrib.postgres.fields import ArrayField
 
 
 class UserManager(BaseUserManager):
@@ -47,7 +48,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(
         db_index=True, max_length=255, unique=True, primary_key=True)
     current_room = models.CharField(max_length=255, default="start")
-
+    players = ArrayField(models.CharField(
+        max_length=255), blank=True, default=list)
     USERNAME_FIELD = 'username'
     objects = UserManager()
 
