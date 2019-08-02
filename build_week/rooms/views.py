@@ -2,6 +2,8 @@ from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 
+from .models import Room
+
 
 class RoomsView(APIView):
     permission_classes = [IsAuthenticated]
@@ -12,9 +14,9 @@ class RoomsView(APIView):
     def get(self, request):
         return JsonResponse([
             [
-                {"n": 0, "e": 0, "s": 1, "w": 0,
-                 "title": "Library",
-                 "description": "You want weapons? Too bad, we’re in a library! Books! The most ineffective weapons in the world! Maybe try to find a sword somewhere and arm yourself!"},
+                {Room.objects.create_room(n=0, e=0, s=1, w=0,
+                                          title="Library",
+                                          description="You want weapons? Too bad, we’re in a library! Books! The most ineffective weapons in the world! Maybe try to find a sword somewhere and arm yourself!")},
                 {"n": 0, "e": 1, "s": 0, "w": 0,
                  "title": "Normal hallway",
                  "description": "This is the kind of hallway you'd expect in a mildly spooky dungeon. There's moss growing on the rock walls, rivulets of water trickling out from who knows where, lit torches (with infinite fuel for some reason) in THOSE metal sconces (you know the ones I'm talking about)"},

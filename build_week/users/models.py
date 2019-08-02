@@ -46,7 +46,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # their character is currently in
     username = models.CharField(
         db_index=True, max_length=255, unique=True, primary_key=True)
-    current_room = models.CharField(max_length=255, default="start")
+    current_room = models.CharField(max_length=255, default="Library")
 
     USERNAME_FIELD = 'username'
     objects = UserManager()
