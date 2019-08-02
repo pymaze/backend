@@ -74,7 +74,6 @@ class UserSerializer(serializers.ModelSerializer):
             'current_room', instance.current_room)
         instance.save()
 
-        users = User.objects.all()
         users = [u.username for u in User.objects.all(
         ) if u.current_room == instance.current_room and u.username != instance.username]
         instance.players = users
