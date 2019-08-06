@@ -27,7 +27,7 @@ SECRET_KEY = config('SECRET_KEY')
 
 
 ALLOWED_HOSTS = [
-    'https://pymaze.herokuapp.com/', 'http:/localhost:8000']
+    config('DEPLOYED_URL'), 'http:/localhost:8000']
 
 
 # Application definition
