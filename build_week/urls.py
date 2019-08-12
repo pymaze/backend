@@ -9,6 +9,7 @@ urlpatterns = [
     path('auth/', include('users.urls', namespace='users')),
     path('api/rooms/', views.RoomsView.as_view()),
     path('say/', api.say),
+    path('shout/', api.shout)
     path('', views.RoomsView.index)
 
 ]
