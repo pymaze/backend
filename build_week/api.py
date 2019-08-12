@@ -26,7 +26,6 @@ def say(request):
     message = request.data.get('message', '')
     print(f'message: {message}')
     time = strftime("%m-%d-%Y %H:%M:%S", gmtime())
-    nearby_players = [u.username for u in User.objects.all(
-    ) if u.current_room == user.current_room and u.username != user.username]
-    print("nearby players: ", nearby_players)
+    players_in_room = User.objects.filter(current_room=user.current_room)
+    print("nearby players: ", players_in_room)
     return JsonResponse({'message': message})
