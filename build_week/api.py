@@ -28,4 +28,28 @@ def say(request):
     time = strftime("%m-%d-%Y %H:%M:%S", gmtime())
     players_in_room = User.objects.filter(current_room=user.current_room)
     print("nearby players: ", players_in_room)
-    return JsonResponse({'message': message})
+    for player in players_in_room:
+        pusher.trigger(f'p-channel-{player.username}', u'broadcast', {
+                       'name': player.username, 'message': f'{message}', 'time': f'{time}'})
+    return JsonResponse({'name': user.username, 'message': request.data['message']}, safe=True)
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes((permissions.AllowAny,))
+def shout(request):
+    try:
+        user = User.objects.get(username=request.data.get('username'))
+    except User.DoesNotExist:
+        print('That user does not exist')
+        return JsonResponse({'error': 'That user does not exist'})
+    print(f'user: {user}')
+    message = request.data.get('message', '')
+    print(f'message: {message}')
+    time = strftime("%m-%d-%Y %H:%M:%S", gmtime())
+    all_players = User.objects.all()
+    print("all players: ", all_players)
+    for player in all_players:
+        pusher.trigger(f'p-channel-{player.username}', u'broadcast', {
+                       'name': player.username, 'message': f'{message}', 'time': f'{time}'})
+    return JsonResponse({'name': user.username, 'message': request.data['message']}, safe=True)
